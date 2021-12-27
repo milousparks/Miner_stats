@@ -15,6 +15,10 @@ for i in range(len(r_etehrmine_jsonData['data'])):
     ts=r_etehrmine_jsonData['data'][i]['paidOn']
     tx_date=datetime.utcfromtimestamp(ts).strftime('%d-%m-%Y') #time coversion
     coin_price_date=cg.get_coin_history_by_id('ethereum',tx_date)
-    data.append({'Transaction_Number':i,'Transaction_Date':tx_date,'TxHash':r_etehrmine_jsonData['data'][i]['txHash'],'Coin_Price':r_etehrmine_jsonData['data'][i]['amount'],'coin_price':coin_price_date})
+    ether_amount=r_etehrmine_jsonData['data'][i]['amount']/1e18
+    tx_hash=r_etehrmine_jsonData['data'][i]['txHash']
+    value_payout=ether_amount*ether_amount
+    data.append({'Transaction_Number':i,'Transaction_Date':tx_date,'TxHash':tx_hash,'Ether_Amount':ether_amount,'coin_price':coin_price_date,'Value':value_payout})
 
+print(data)
 
