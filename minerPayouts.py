@@ -26,10 +26,10 @@ def payoutData_API(ethermin_key):
         ether_amount=r_etehrmine_jsonData['data'][i]['amount']/1e18
         tx_hash=r_etehrmine_jsonData['data'][i]['txHash']
         value_payout=ether_amount*coin_price_date
-        data.append({'Transaction_Number':i,'Transaction_Date':tx_date,'TxHash':tx_hash,'Ether_Amount':ether_amount,'coin_price':coin_price_date,'Value':value_payout})
+        data.append({'Transaction_Number':len(r_etehrmine_jsonData['data'])-i,'Transaction_Date':tx_date,'TxHash':tx_hash,'Ether_Amount':ether_amount,'coin_price':coin_price_date,'Value':value_payout})
 
     # write a row to the csv file
-    file_path='./test'+ethermin_key
+    file_path='./CSV_'+ethermin_key
     # open the file in the write mode
     f = open(file_path, 'w')
     # create the csv writer
