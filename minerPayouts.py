@@ -2,17 +2,18 @@
 import requests
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
-
+import csv
 
 #User defines
 p_key_ethermine1='03e55fd61796743daa47399fc3cffea19b336db6'
-p_key_ethermine2=0x39ebc5649481087d5a5632da25ffd3e89db5dc36
+p_key_ethermine2='0x39ebc5649481087d5a5632da25ffd3e89db5dc36'
 
-file_path='./'
-payoutData_API(p_key_ethermine1)
-payoutData_API(p_key_ethermine2)
+
+
 
 def payoutData_API(ethermin_key):
+
+
     cg = CoinGeckoAPI()
     data=[];
     api_path_ethermine='https://api.ethermine.org/miner/'+ethermin_key+'/payouts'
@@ -26,6 +27,18 @@ def payoutData_API(ethermin_key):
         tx_hash=r_etehrmine_jsonData['data'][i]['txHash']
         value_payout=ether_amount*coin_price_date
         data.append({'Transaction_Number':i,'Transaction_Date':tx_date,'TxHash':tx_hash,'Ether_Amount':ether_amount,'coin_price':coin_price_date,'Value':value_payout})
-        print(data)
 
+    # write a row to the csv file
+    file_path='./test'+ethermin_key
+    # open the file in the write mode
+    f = open(file_path, 'w')
+    # create the csv writer
+    keys=data[0].keys()
+    writer = csv.DictWriter(f,keys)
+    writer.writeheader()
+    writer.writerows(data)
+    f.close()
+
+payoutData_API(p_key_ethermine1)
+payoutData_API(p_key_ethermine2)
 
