@@ -20,10 +20,8 @@ def payoutData_API(ethermin_key):
     api_path_ethermine='https://api.ethermine.org/miner/'+ethermin_key+'/payouts'
     r_ethermine_payouts=requests.get(api_path_ethermine)
     r_etehrmine_jsonData=r_ethermine_payouts.json()
-    if r_ethermine_payouts.status_code == 429:
-        time.sleep(int(response.headers["Retry-After"]))
 
-    for i in range(len(r_etehrmine_jsonData['data'])):
+    for i in range(len(r_etehrmine_jsonData['data'])-1,0,-1):
         ts=r_etehrmine_jsonData['data'][i]['paidOn']
         tx_date=datetime.utcfromtimestamp(ts).strftime('%d-%m-%Y') #time coversion
         coin_price_date=cg.get_coin_history_by_id('ethereum',tx_date)['market_data']['current_price']['eur']
@@ -34,7 +32,7 @@ def payoutData_API(ethermin_key):
         data.append({'Transaction_Number':len(r_etehrmine_jsonData['data'])-i,'Transaction_Date':tx_date,'TxHash':tx_hash,'Ether_Amount':ether_amount,'coin_price':coin_price_date,'Value':value_payout})
 
     # write a row to the csv file
-    file_path='./CSV_'+ethermin_key
+    file_path='./CSV_'+ethermin_key + ".csv"
     # open the file in the write mode
     f = open(file_path, 'w')
     # create the csv writer
