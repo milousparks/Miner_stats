@@ -3,6 +3,7 @@ import requests
 from pycoingecko import CoinGeckoAPI
 from datetime import datetime
 import csv
+import time
 
 #User defines
 p_key_ethermine1='03e55fd61796743daa47399fc3cffea19b336db6'
@@ -26,8 +27,7 @@ def payoutData_API(ethermin_key):
         ts=r_etehrmine_jsonData['data'][i]['paidOn']
         tx_date=datetime.utcfromtimestamp(ts).strftime('%d-%m-%Y') #time coversion
         coin_price_date=cg.get_coin_history_by_id('ethereum',tx_date)['market_data']['current_price']['eur']
-        if coin_price_date.status_code == 429:
-            time.sleep(int(response.headers["Retry-After"]))
+        time.sleep(1)
         ether_amount=r_etehrmine_jsonData['data'][i]['amount']/1e18
         tx_hash=r_etehrmine_jsonData['data'][i]['txHash']
         value_payout=ether_amount*coin_price_date
