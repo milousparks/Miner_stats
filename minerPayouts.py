@@ -19,6 +19,9 @@ def payoutData_API(ethermin_key):
     api_path_ethermine='https://api.ethermine.org/miner/'+ethermin_key+'/payouts'
     r_ethermine_payouts=requests.get(api_path_ethermine)
     r_etehrmine_jsonData=r_ethermine_payouts.json()
+    if r_ethermine_payouts.status_code == 429:
+     time.sleep(int(response.headers["Retry-After"]))
+     
     for i in range(len(r_etehrmine_jsonData['data'])):
         ts=r_etehrmine_jsonData['data'][i]['paidOn']
         tx_date=datetime.utcfromtimestamp(ts).strftime('%d-%m-%Y') #time coversion
